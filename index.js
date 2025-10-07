@@ -21,7 +21,7 @@ if (allRides.length === 0) {
         // Linhas criar cards em lista
         const itemElement = document.createElement("li")
         itemElement.id = ride.id
-        itemElement.className = "card bg-light text-dark d-flex p-1 m-1 align-items-center justify-content-between gap-3"
+        itemElement.className = "bg-light text-dark d-flex p-1 mb-1 rounded-3 align-items-center justify-content-between gap-3"
 
         rideListElement.appendChild(itemElement)
 
@@ -49,7 +49,7 @@ if (allRides.length === 0) {
 
         const maxSpeedDiv = document.createElement("div")
         maxSpeedDiv.innerText = `Max speed: ${getMaxSpeed(ride.data)} km/h`
-        maxSpeedDiv.className = "h5"
+        // maxSpeedDiv.className = "h5"
 
         const distanceDiv = document.createElement("div")
         distanceDiv.innerText = `Distance: ${getDistance(ride.data)} km`
