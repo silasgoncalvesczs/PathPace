@@ -21,7 +21,7 @@ if (allRides.length === 0) {
         // Linhas criar cards em lista
         const itemElement = document.createElement("li")
         itemElement.id = ride.id
-        itemElement.className = "card bg-light text-dark d-flex p-1 align-items-center justify-content-between shadow-sm gap-3"
+        itemElement.className = "bg-light text-dark d-flex p-1 align-items-center justify-content-between shadow-sm gap-3"
 
         rideListElement.appendChild(itemElement)
 
