@@ -10,9 +10,39 @@ let watchID = null;
 let currentRide = null;
 let durationInterval = null;
 
+// Variável para guardar o controle do Wake Lock
+let wakeLock = null;
+
+// Função para solicitar o bloqueio de tela
+const requestWakeLock = async () => {
+    // Verifica se o navegador suporta a API
+    if ('wakeLock' in navigator) {
+        try {
+            wakeLock = await navigator.wakeLock.request('screen');
+            console.log('Wake Lock ativado com sucesso!');
+        } catch (err) {
+            console.error(`${err.name}, ${err.message}`);
+        }
+    } else {
+        console.log('Wake Lock API não é suportada neste navegador.');
+    }
+};
+
+// Função para liberar o bloqueio de tela
+const releaseWakeLock = async () => {
+    if (wakeLock) {
+        await wakeLock.release();
+        wakeLock = null;
+        console.log('Wake Lock liberado.');
+    }
+};
+
 startBtn.addEventListener("click", () => {
     if (watchID)
         return
+
+    // >>> NOVO: Solicita o bloqueio de tela ao iniciar
+    requestWakeLock();
 
     function handleSuccess(position) {
         addPosition(currentRide, position)
@@ -53,6 +83,9 @@ stopBtn.addEventListener("click", () => {
     if (!watchID)
         return
 
+    // >>> NOVO: Libera o bloqueio de tela ao parar
+    releaseWakeLock();
+
     // Para o cronômetro e o GPS
     clearInterval(durationInterval);
     navigator.geolocation.clearWatch(watchID)
@@ -71,3 +104,11 @@ stopBtn.addEventListener("click", () => {
 
     window.location.href = "./"
 })
+
+// Opcional, mas recomendado: Lida com a visibilidade da aba
+// Se o usuário mudar de aba, o wake lock é liberado. Esta função o reativa quando ele volta.
+document.addEventListener('visibilitychange', async () => {
+    if (wakeLock !== null && document.visibilityState === 'visible') {
+        await requestWakeLock();
+    }
+});
