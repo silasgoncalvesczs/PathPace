@@ -6,6 +6,10 @@
 
 }
 
+body {
+    background-color: #c7c7ca; /* Um cinza bem claro e moderno */
+}
+
 .btn-primary {
     --bs-btn-color: #fff;
     --bs-btn-bg: #29c5cf;
