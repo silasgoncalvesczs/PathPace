@@ -18,15 +18,11 @@ if (allRides.length === 0) {
         const ride = JSON.parse(value)
         ride.id = id
 
-        // Linhas Atuais
-        // const itemElement = document.createElement("li")
-        // itemElement.id = ride.id
-        // itemElement.className = "d-flex p-1 align-items-center justify-content-between shadow-sm gap-3"
-        
-        // Novas Linhas para criar um Card
-        const itemElement = document.createElement("div");
-        itemElement.id = ride.id;
-        itemElement.className = "card mb-3 p-3"; // Usando a classe de Card do Bootstrap
+        // Linhas criar cards em lista
+        const itemElement = document.createElement("li")
+        itemElement.id = ride.id
+        itemElement.className = "d-flex p-1 align-items-center justify-content-between shadow-sm gap-3"
+
         rideListElement.appendChild(itemElement)
 
         itemElement.addEventListener("click", () => {
