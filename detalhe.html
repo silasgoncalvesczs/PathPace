@@ -1,51 +1,123 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-100">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#eef2f6">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="PathPace">
+    <script>
+        (function () {
+            var tema = null
+            try { tema = localStorage.getItem("pathpace:tema") } catch (e) {}
+            if (tema !== "claro" && tema !== "escuro")
+                tema = window.matchMedia("(prefers-color-scheme: dark)").matches ? "escuro" : "claro"
+            document.documentElement.setAttribute("data-bs-theme", tema === "escuro" ? "dark" : "light")
+            document.documentElement.setAttribute("data-tema", tema)
+            document.querySelector('meta[name="theme-color"]')
+                .setAttribute("content", tema === "escuro" ? "#0e141b" : "#eef2f6")
+        })()
+    </script>
+    <link rel="manifest" href="./manifest.webmanifest">
     <link rel="icon" href="./assets/PathPace_logo.png" type="image/png">
-    <title>PathPace</title>
+    <link rel="apple-touch-icon" href="./assets/icones/apple-touch-icon.png">
+    <title>PathPace - Detalhe da corrida</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="./global.css">
+    <link rel="stylesheet" href="./estilos.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 </head>
 
-<body class="h-100">
+<body>
+    <div class="container aplicativo d-flex flex-column min-vh-100">
+        <header class="cabecalho">
+            <a class="marca" href="./index.html">
+                <img class="PathPaceLogo" src="./assets/PathPace_logo.png" alt="">
+                <span>PathPace</span>
+            </a>
+            <div class="cabecalho-acoes">
+                <button type="button" class="btn-icone" data-botao-tema aria-label="Mudar tema">
+                    <i class="bi bi-moon-stars"></i>
+                </button>
+                <a id="btnFechar" class="btn-icone" href="./index.html" aria-label="Voltar ao histórico" title="Voltar">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+            </div>
+        </header>
 
-    <div class="container d-flex flex-column h-100">
-        <div class="d-flex justify-content-center align-items-center mt-2">
-             <img class="m-2 PathPaceLogo" src="./assets/PathPace_logo.png" alt="Path Pace">
-             <h3>PathPace</h3>
-        </div>
+        <div id="mapaDetalhe" class="mapa-detalhe"></div>
 
-        <nav class="navbar justify-content-end">
-            <a class="btn btn-close border border-dark p-2" href="./index.html"></a>
-        </nav>
-
-        <div id="mapDetail" class="rounded-4">
-
-        </div>
-
-        <div class="d-flex flex-column justify-content-between flex-fill mt-3 mb-3">
-            <div id="data"></div>
-
-            <button id="deleteBtn" class="btn btn-danger d-grid gap-2 col-4">
-                <span class="display-6">Delete</span>
+        <div id="barraMapa" class="barra-mapa d-none">
+            <button id="btnCorVelocidade" type="button" class="btn-cor-velocidade" aria-pressed="true">
+                <i class="bi bi-palette"></i> Cor por velocidade
             </button>
+            <div id="legendaVelocidade" class="legenda-velocidade">
+                <span id="legendaMinimo"></span>
+                <span class="legenda-barra" aria-hidden="true"></span>
+                <span id="legendaMaximo"></span>
+                <span>km/h</span>
+            </div>
         </div>
+
+        <div id="dados" class="mt-3"></div>
+
+        <section id="graficoVelocidade" class="grafico-card d-none" aria-labelledby="graficoTitulo">
+            <div class="grafico-cabecalho">
+                <h2 id="graficoTitulo" class="grafico-titulo">Velocidade ao longo do tempo</h2>
+                <span id="graficoLeitura" class="grafico-leitura" aria-live="polite"></span>
+            </div>
+            <div id="graficoArea" class="grafico-area"></div>
+            <p id="graficoNota" class="grafico-nota"></p>
+        </section>
+
+        <section id="parciais" class="grafico-card d-none" aria-labelledby="parciaisTitulo">
+            <div class="grafico-cabecalho">
+                <h2 id="parciaisTitulo" class="grafico-titulo">Parciais por km</h2>
+                <div id="parciaisModo" class="segmentado d-none" role="group" aria-label="Tipo de parcial">
+                    <button type="button" data-modo="volta" aria-pressed="false">Por volta</button>
+                    <button type="button" data-modo="km" aria-pressed="false">Por km</button>
+                </div>
+            </div>
+            <div class="parciais-rolagem">
+                <table class="parciais-tabela">
+                    <thead>
+                        <tr>
+                            <th id="parciaisColuna" scope="col">Km</th>
+                            <th scope="col">Dist. (km)</th>
+                            <th scope="col">Tempo</th>
+                            <th scope="col">Ritmo</th>
+                            <th scope="col">km/h</th>
+                        </tr>
+                    </thead>
+                    <tbody id="parciaisCorpo"></tbody>
+                </table>
+            </div>
+            <p id="parciaisLegenda" class="grafico-nota">
+                Ritmo em min/km.
+                <i class="bi bi-caret-up-fill parcial-icone-rapida"></i> mais rápida
+                <i class="bi bi-caret-down-fill parcial-icone-lenta"></i> mais lenta.
+                <span id="parciaisNotaIncompleta">Linha em itálico: trecho incompleto, fora da comparação.</span>
+            </p>
+        </section>
+
+        <button id="btnExcluir" class="btn btn-excluir">Excluir corrida</button>
     </div>
 
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <script src="./storage.js"></script>
-    <script src="./dataManager.js"></script>
-    <script src="./detail.js"></script>
+    <script src="./armazenamento.js"></script>
+    <script src="./calculos.js"></script>
+    <script src="./local.js"></script>
+    <script src="./tema.js"></script>
+    <script src="./interface.js"></script>
+    <script src="./detalhe.js"></script>
+    <script src="./pwa.js"></script>
 </body>
 
 </html>

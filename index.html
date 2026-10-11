@@ -5,44 +5,90 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#eef2f6">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="PathPace">
+    <script>
+        (function () {
+            var tema = null
+            try { tema = localStorage.getItem("pathpace:tema") } catch (e) {}
+            if (tema !== "claro" && tema !== "escuro")
+                tema = window.matchMedia("(prefers-color-scheme: dark)").matches ? "escuro" : "claro"
+            document.documentElement.setAttribute("data-bs-theme", tema === "escuro" ? "dark" : "light")
+            document.documentElement.setAttribute("data-tema", tema)
+            document.querySelector('meta[name="theme-color"]')
+                .setAttribute("content", tema === "escuro" ? "#0e141b" : "#eef2f6")
+        })()
+    </script>
+    <link rel="manifest" href="./manifest.webmanifest">
     <link rel="icon" href="./assets/PathPace_logo.png" type="image/png">
-    <title>PathPace</title>
+    <link rel="apple-touch-icon" href="./assets/icones/apple-touch-icon.png">
+    <title>PathPace - Histórico de corridas</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="./global.css">
+    <link rel="stylesheet" href="./estilos.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;300;400;700&display=swap"
-        rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-        <div class="d-flex justify-content-center align-items-center mt-2">
-             <img class="m-2 PathPaceLogo" src="./assets/PathPace_logo.png" alt="Path Pace">
-             <h3>PathPace</h3>
+    <div class="container aplicativo pagina-lista">
+        <header class="cabecalho">
+            <a class="marca" href="./index.html">
+                <img class="PathPaceLogo" src="./assets/PathPace_logo.png" alt="">
+                <span>PathPace</span>
+            </a>
+            <div class="cabecalho-acoes">
+                <button type="button" class="btn-icone d-none" data-botao-instalar
+                    aria-label="Instalar aplicativo" title="Instalar aplicativo">
+                    <i class="bi bi-download"></i>
+                </button>
+                <button type="button" class="btn-icone" data-botao-tema aria-label="Mudar tema">
+                    <i class="bi bi-moon-stars"></i>
+                </button>
+            </div>
+        </header>
+
+        <p id="avisoArmazenamento" class="aviso-armazenamento" role="status" hidden></p>
+
+        <a id="avisoCorridaAtiva" class="aviso-corrida d-none" href="./velocimetro.html">
+            <i class="bi bi-broadcast"></i>
+            <span><strong>Corrida em andamento.</strong> Toque para retomar a gravação.</span>
+        </a>
+
+        <div id="controlesTopo" class="barra-lista d-none">
+            <span id="resumoPagina"></span>
+            <div class="d-flex align-items-center gap-2">
+                <label for="porPagina" class="mb-0">Corridas por página</label>
+                <select id="porPagina" class="form-select form-select-sm w-auto"></select>
+            </div>
         </div>
 
-        <ul id="rideList" class="list-group list-group-flush">
+        <ul id="listaCorridas" class="lista-corridas"></ul>
 
-        </ul>
+        <nav id="paginacao" class="paginacao d-none" aria-label="Paginação do histórico">
+            <button id="btnAnterior" class="btn btn-outline-secondary btn-sm">Anterior</button>
+            <span id="indicadorPagina" class="small"></span>
+            <button id="btnProxima" class="btn btn-outline-secondary btn-sm">Próxima</button>
+        </nav>
 
-        <a href="./speedometer.html" class="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-4"
-            style="z-index: 999;">
-            <i class="bi bi-plus-lg display-1"></i>
+        <a href="./velocimetro.html" class="btn-nova-corrida" aria-label="Nova corrida" title="Nova corrida">
+            <i class="bi bi-plus-lg"></i>
         </a>
     </div>
 
-
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <script src="./storage.js"></script>
-    <script src="./dataManager.js"></script>
+    <script src="./armazenamento.js"></script>
+    <script src="./calculos.js"></script>
+    <script src="./local.js"></script>
+    <script src="./tema.js"></script>
+    <script src="./interface.js"></script>
     <script src="./index.js"></script>
+    <script src="./pwa.js"></script>
 </body>
 
 </html>

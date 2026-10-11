@@ -1,57 +1,839 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css");
 
 :root,
-[data-bs-theme=light] {
+[data-bs-theme="light"] {
     --bs-primary-rgb: 41, 197, 207;
+    --fundo: #eef2f6;
+    --superficie: #ffffff;
+    --superficie-2: #f3f6f9;
+    --texto-suave: #5c6770;
+    --linha: rgba(20, 35, 50, 0.08);
+    --sombra: 0 10px 30px rgba(20, 35, 50, 0.08);
+    --marca: #129eaa;
+}
 
+[data-bs-theme="dark"] {
+    --bs-primary-rgb: 41, 197, 207;
+    --fundo: #0e141b;
+    --superficie: #18222c;
+    --superficie-2: #121a22;
+    --texto-suave: #9aa6b2;
+    --linha: rgba(255, 255, 255, 0.08);
+    --sombra: 0 12px 32px rgba(0, 0, 0, 0.35);
+    --marca: #3fd4de;
 }
 
 body {
-    background-color: #dcdce6; /* Um cinza bem claro e moderno */
+    background: var(--fundo);
+    color: var(--bs-body-color);
 }
 
-.PathPaceLogo{
-    width: 12%;
+.aplicativo {
+    max-width: 720px;
 }
 
-.btn-primary {
-    --bs-btn-color: #fff;
-    --bs-btn-bg: #29c5cf;
-    --bs-btn-border-color: #29c5cf;
-    --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #20858c;
-    --bs-btn-hover-border-color: #20858c;
-    --bs-btn-focus-shadow-rgb: 49, 132, 253;
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: #20858c;
-    --bs-btn-active-border-color: #20858c;
-    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: #fff;
-    --bs-btn-disabled-bg: #29c5cf;
-    --bs-btn-disabled-border-color: #29c5cf;
+.cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 0.85rem 0;
+    margin-bottom: 0.25rem;
+    background: color-mix(in srgb, var(--fundo) 82%, transparent);
+    backdrop-filter: blur(14px);
 }
 
-#mapDetail {
-    height: 300px;
-    background-color: #ccc;
-}
-
-.font200 {
-    font-family: 'Roboto Mono', monospace;
-    font-weight: 200;
-}
-
-.font300 {
-    font-family: 'Roboto Mono', monospace;
-    font-weight: 300;
-}
-
-.font400 {
-    font-family: 'Roboto Mono', monospace;
-    font-weight: 400;
-}
-
-.font700 {
-    font-family: 'Roboto Mono', monospace;
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: inherit;
     font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+}
+
+.PathPaceLogo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.cabecalho-acoes {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-icone {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    border: 1px solid var(--linha);
+    background: var(--superficie);
+    color: inherit;
+    text-decoration: none;
+    box-shadow: var(--sombra);
+}
+
+.btn-icone:hover {
+    color: var(--marca);
+}
+
+.pagina-lista {
+    padding-bottom: 6.5rem;
+}
+
+.barra-lista,
+.paginacao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.barra-lista {
+    margin-bottom: 0.9rem;
+    color: var(--texto-suave);
+    font-size: 0.85rem;
+}
+
+.barra-lista .form-select {
+    border-radius: 10px;
+    border-color: var(--linha);
+    background-color: var(--superficie);
+}
+
+.lista-corridas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.card-corrida {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.7rem;
+    border-radius: 18px;
+    background: var(--superficie);
+    border: 1px solid var(--linha);
+    box-shadow: var(--sombra);
+    cursor: pointer;
+}
+
+@media (hover: hover) {
+    .card-corrida:hover {
+        transform: translateY(-2px);
+    }
+}
+
+.card-corrida:focus-visible {
+    outline: 2px solid #29c5cf;
+    outline-offset: 2px;
+}
+
+.miniatura-mapa {
+    width: 92px;
+    height: 92px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--superficie-2);
+    pointer-events: none;
+}
+
+.miniatura-vazia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--texto-suave);
+    font-size: 1.4rem;
+}
+
+.local-corrida {
+    color: var(--marca);
+    font-weight: 650;
+    font-size: 0.92rem;
+    margin-bottom: 0.35rem;
+}
+
+.local-corrida-grande {
+    font-size: 1.15rem;
+    margin-bottom: 0.85rem;
+}
+
+.metricas {
+    display: flex;
+    gap: 0.85rem;
+}
+
+.metrica {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.metrica strong {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.metrica span {
+    color: var(--texto-suave);
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+}
+
+.metricas-grandes {
+    gap: 0.65rem;
+}
+
+.metricas-grandes .metrica {
+    flex: 1;
+    background: var(--superficie);
+    border: 1px solid var(--linha);
+    border-radius: 16px;
+    padding: 0.9rem 0.75rem;
+    box-shadow: var(--sombra);
+}
+
+.metricas-grandes .metrica strong {
+    font-size: 1.35rem;
+}
+
+.metricas-grandes .metrica span {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+}
+
+.data-corrida {
+    margin-top: 0.4rem;
+    color: var(--texto-suave);
+    font-size: 0.78rem;
+}
+
+.paginacao {
+    position: sticky;
+    bottom: 5.25rem;
+    z-index: 15;
+    margin-top: 1rem;
+    padding: 0.65rem 0;
+    background: color-mix(in srgb, var(--fundo) 88%, transparent);
+    backdrop-filter: blur(12px);
+}
+
+.paginacao .btn {
+    border-radius: 12px;
+}
+
+.btn-nova-corrida {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 30;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #29c5cf;
+    color: #fff;
+    font-size: 1.45rem;
+    text-decoration: none;
+    box-shadow: 0 10px 24px rgba(41, 197, 207, 0.45);
+}
+
+.btn-nova-corrida:hover {
+    background: #20858c;
+    color: #fff;
+}
+
+.estado-vazio {
+    text-align: center;
+    padding: 3.5rem 1rem;
+    color: var(--texto-suave);
+}
+
+.estado-vazio h2 {
+    color: var(--bs-body-color);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+}
+
+.mapa-detalhe {
+    height: min(42vh, 360px);
+    min-height: 220px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--superficie-2);
+    border: 1px solid var(--linha);
+    box-shadow: var(--sombra);
+}
+
+.mapa-detalhe .leaflet-bottom.leaflet-right {
+    margin: 0 10px 8px 0;
+}
+
+/* Gráfico de velocidade x tempo (SVG). As cores vêm das variáveis do tema. */
+.grafico-card {
+    margin-top: 1rem;
+    padding: 1rem 1rem 0.85rem;
+    background: var(--superficie);
+    border: 1px solid var(--linha);
+    border-radius: 20px;
+    box-shadow: var(--sombra);
+}
+
+.grafico-cabecalho {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.grafico-titulo {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.grafico-leitura {
+    color: var(--texto-suave);
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.grafico-area {
+    width: 100%;
+}
+
+.grafico-svg {
+    display: block;
+    max-width: 100%;
+    touch-action: pan-y;
+    user-select: none;
+}
+
+.grafico-grade {
+    stroke: var(--linha);
+    stroke-width: 1;
+}
+
+.grafico-texto {
+    fill: var(--texto-suave);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+}
+
+.grafico-linha {
+    fill: none;
+    stroke: var(--marca);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.grafico-preenchimento {
+    fill: url(#gradienteVelocidade);
+}
+
+.grafico-gradiente-topo {
+    stop-color: var(--marca);
+    stop-opacity: 0.35;
+}
+
+.grafico-gradiente-base {
+    stop-color: var(--marca);
+    stop-opacity: 0;
+}
+
+.grafico-media {
+    stroke: var(--texto-suave);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+    opacity: 0.7;
+}
+
+.grafico-ponto-isolado {
+    fill: var(--marca);
+}
+
+.grafico-guia {
+    stroke: var(--texto-suave);
+    stroke-width: 1;
+    opacity: 0.6;
+}
+
+.grafico-marcador {
+    fill: var(--marca);
+    stroke: var(--superficie);
+    stroke-width: 2;
+}
+
+.grafico-nota {
+    margin: 0.5rem 0 0;
+    color: var(--texto-suave);
+    font-size: 0.72rem;
+}
+
+.grafico-nota:empty {
+    display: none;
+}
+
+/* Barra abaixo do mapa: botão de cores e legenda. */
+.barra-mapa {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-top: 0.6rem;
+}
+
+.btn-cor-velocidade {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    background: var(--superficie);
+    color: var(--texto-suave);
+    border: 1px solid var(--linha);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.btn-cor-velocidade[aria-pressed="true"] {
+    color: var(--marca);
+    border-color: var(--marca);
+}
+
+.btn-cor-velocidade:focus-visible,
+.segmentado button:focus-visible {
+    outline: 2px solid #29c5cf;
+    outline-offset: 2px;
+}
+
+.legenda-velocidade {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--texto-suave);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Mesmas cores de CORES_VELOCIDADE em calculos.js: lento, médio, rápido. */
+.legenda-barra {
+    width: 90px;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #e11d48, #f59e0b, #14b8a6);
+}
+
+/* Alternador "Por volta / Por km". */
+.segmentado {
+    display: inline-flex;
+    padding: 2px;
+    background: var(--superficie-2);
+    border: 1px solid var(--linha);
+    border-radius: 999px;
+}
+
+.segmentado button {
+    padding: 0.2rem 0.7rem;
+    background: transparent;
+    color: var(--texto-suave);
+    border: 0;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.segmentado button[aria-pressed="true"] {
+    background: var(--marca);
+    color: #fff;
+}
+
+[data-bs-theme="dark"] .segmentado button[aria-pressed="true"] {
+    color: #0e141b;
+}
+
+/* Tabela de parciais. A área rola quando há muitas linhas e o cabeçalho fica fixo. */
+.parciais-rolagem {
+    max-height: 17rem;
+    overflow-y: auto;
+    border-radius: 12px;
+}
+
+.parciais-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.parciais-tabela th,
+.parciais-tabela td {
+    padding: 0.4rem 0.5rem;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.parciais-tabela th:first-child,
+.parciais-tabela td:first-child {
+    text-align: left;
+}
+
+.parciais-tabela th {
+    position: sticky;
+    top: 0;
+    background: var(--superficie);
+    color: var(--texto-suave);
+    font-size: 0.72rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--linha);
+}
+
+.parciais-tabela td {
+    border-bottom: 1px solid var(--linha);
+}
+
+.parcial-rapida td {
+    background: rgba(20, 184, 166, 0.12);
+}
+
+.parcial-lenta td {
+    background: rgba(225, 29, 72, 0.1);
+}
+
+.parcial-incompleta td {
+    color: var(--texto-suave);
+    font-style: italic;
+}
+
+.parcial-icone-rapida {
+    color: #14b8a6;
+}
+
+.parcial-icone-lenta {
+    color: #e11d48;
+}
+
+/* Aviso discreto sobre o espaço do navegador. */
+.aviso-armazenamento {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 0 0 0.75rem;
+    padding: 0.45rem 0.75rem;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.28);
+    border-radius: 12px;
+    color: inherit;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    opacity: 0.9;
+}
+
+.aviso-armazenamento[hidden] {
+    display: none;
+}
+
+.aviso-armazenamento i {
+    color: #f59e0b;
+}
+
+.btn-excluir {
+    align-self: flex-start;
+    margin-top: 1.5rem;
+    margin-bottom: 1.25rem;
+    border-radius: 14px;
+    padding: 0.7rem 1.2rem;
+    background: transparent;
+    color: #e5484d;
+    border: 1px solid #e5484d;
+    font-weight: 650;
+}
+
+.btn-excluir:hover {
+    background: #e5484d;
+    color: #fff;
+}
+
+/* A tela do velocímetro tem exatamente a altura visível (dvh acompanha a barra
+   de endereço do navegador no celular), então o botão nunca fica fora da tela. */
+.pagina-velocimetro {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.painel-velocidade {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0.25rem 0 0;
+    padding: 1.5rem 1rem 1rem;
+    border-radius: 28px;
+    color: #f4f7f8;
+    background:
+        radial-gradient(circle at top, rgba(41, 197, 207, 0.28), transparent 55%),
+        #12181f;
+    box-shadow: var(--sombra);
+}
+
+.painel-corpo {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.painel-acoes {
+    width: 100%;
+    max-width: 380px;
+    flex-shrink: 0;
+}
+
+.velocidade-valor {
+    font-size: clamp(72px, 22vw, 112px);
+    font-weight: 720;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+}
+
+.velocidade-unidade {
+    margin-top: 0.15rem;
+    color: rgba(244, 247, 248, 0.7);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.painel-metricas {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 380px;
+    margin-top: 1.75rem;
+}
+
+.painel-metrica {
+    flex: 1;
+    text-align: center;
+    padding: 0.9rem 0.5rem;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.painel-metrica span:first-child {
+    display: block;
+    font-size: 1.7rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.painel-metrica span:last-child {
+    color: rgba(244, 247, 248, 0.65);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+}
+
+/* Mostra se a tela está sendo mantida ligada durante a corrida. */
+.painel-bloqueio {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 1rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    color: rgba(244, 247, 248, 0.75);
+    font-size: 0.78rem;
+    text-align: center;
+}
+
+.painel-bloqueio[hidden] {
+    display: none;
+}
+
+.painel-bloqueio::before {
+    content: "";
+    flex-shrink: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.painel-bloqueio[data-estado="ligada"] {
+    color: #5ee0a0;
+}
+
+.painel-bloqueio[data-estado="desligada"] {
+    color: #ffd37a;
+}
+
+.painel-status {
+    min-height: 2.5rem;
+    margin-top: 1rem;
+    text-align: center;
+    color: #ffd37a;
+    font-size: 0.85rem;
+}
+
+.btn-acao {
+    display: block;
+    width: 100%;
+    border: 0;
+    border-radius: 16px;
+    padding: 1rem;
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.btn-acao.d-none {
+    display: none;
+}
+
+/* Telas baixas (celular deitado, janelas pequenas): compacta o painel. */
+@media (max-height: 560px) {
+    .velocidade-valor {
+        font-size: clamp(48px, 16vh, 80px);
+    }
+
+    .painel-metricas {
+        margin-top: 0.75rem;
+    }
+
+    .painel-metrica {
+        padding: 0.5rem;
+    }
+
+    .painel-metrica span:first-child {
+        font-size: 1.3rem;
+    }
+
+    .painel-status {
+        min-height: 1.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .btn-acao {
+        padding: 0.7rem;
+    }
+}
+
+/* Celular deitado: números à esquerda e botão à direita, sem empilhar. */
+@media (max-height: 560px) and (orientation: landscape) {
+    .painel-velocidade {
+        flex-direction: row;
+        align-items: center;
+        gap: 1.25rem;
+        padding: 0.75rem 1.25rem;
+    }
+
+    .painel-corpo {
+        height: 100%;
+    }
+
+    .painel-acoes {
+        width: 38%;
+        max-width: 260px;
+    }
+}
+
+.btn-acao-iniciar {
+    background: #29c5cf;
+}
+
+.btn-acao-iniciar:hover {
+    background: #20858c;
+}
+
+.btn-acao-secundario {
+    margin-top: 0.6rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.btn-acao-secundario:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-acao-parar {
+    background: #e5484d;
+}
+
+.btn-acao-parar:hover {
+    background: #c9363b;
+}
+
+.aviso-corrida {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.9rem;
+    padding: 0.85rem 1rem;
+    border-radius: 16px;
+    background: rgba(41, 197, 207, 0.14);
+    border: 1px solid rgba(41, 197, 207, 0.45);
+    color: inherit;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.aviso-corrida i {
+    color: var(--marca);
+    font-size: 1.2rem;
+}
+
+.btn-icone:focus-visible,
+.btn-nova-corrida:focus-visible,
+.btn-acao:focus-visible,
+.btn-excluir:focus-visible {
+    outline: 2px solid #29c5cf;
+    outline-offset: 3px;
+}
+
+/* Escurece só as ruas. Marcador e rota ficam nas outras camadas, sem o filtro. */
+[data-bs-theme="dark"] .leaflet-tile-pane {
+    filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.95);
+}
+
+[data-bs-theme="dark"] .leaflet-bar a {
+    background: #18222c;
+    color: #e8eef2;
+    border-color: #2a3846;
+}
+
+[data-bs-theme="dark"] .leaflet-bar a:hover {
+    background: #223140;
 }
